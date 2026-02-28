@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -r dotenv/config --experimental-json-modules src/index.js",
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
     "create-admin": "node scripts/createAdmin.js"
   },
   "keywords": [
