@@ -1,4 +1,4 @@
-import admin from "../config/firebaseAdmin.js";
+import admin from "../config/serviceAccountKey.js";
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
