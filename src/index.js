@@ -1,7 +1,6 @@
-import dotenv from "dotenv";
-dotenv.config({
-  path: "./.env"
-});
+import "./config/env.js";
+import "./config/firebaseAdmin.js"
+import "./config/firebaseAdmin.js"
 import connectDB from "./db/db.js";
 import app from "../src/app.js";
 
