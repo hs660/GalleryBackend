@@ -7,15 +7,20 @@ import imageRouter from "../src/routes/image.route.js"
 
 const app = express();
 
-app.use(cors(
-    {
-        origin: [
-            process.env.CORS_ORIGIN,
-            "website-user-three.vercel.app"
-        ],
-        credentials: true
+app.use(cors({
+  origin: function(origin, callback) {
+    const allowedOrigins = [
+       process.env.CORS_ORIGIN,
+      "https://website-user-three.vercel.app"
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
     }
-))
+  },
+  credentials: true
+}));
 
 app.use(express.json({limit:"20kb"}))
 app.use(express.urlencoded({extended:true, limit:"16kb"}))
