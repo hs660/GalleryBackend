@@ -7,12 +7,9 @@ import imageRouter from "../src/routes/image.route.js"
 
 const app = express();
 
+const allowedOrigins = process.env.CORS_ORIGIN.split(",");
 app.use(cors({
   origin: function(origin, callback) {
-    const allowedOrigins = [
-       process.env.CORS_ORIGIN,
-      "https://website-user-three.vercel.app"
-    ];
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
