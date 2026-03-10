@@ -59,22 +59,25 @@ export const toggleLike = async (req, res) => {
     if (!image) return res.status(404).json({ message: "Image not found" });
 
     if (!image.likedBy) image.likedBy = [];
-
+    let isLiked;
     const alreadyLiked = image.likedBy.includes(userId);
 
     if (alreadyLiked) {
       image.likesCount -= 1;
       image.likedBy = image.likedBy.filter(uid => uid !== userId);
+      isLiked:false;
     } else {
       image.likesCount += 1;
       image.likedBy.push(userId);
+      isLiked:true;
     }
 
     await image.save();
 
     res.json({ 
-      message: alreadyLiked ? "Unliked" : "Liked", 
-      likesCount: image.likesCount 
+      message: isLiked ? "Unliked" : "Liked", 
+      likesCount: image.likesCount,
+      isLiked: isLiked
     });
 
   } catch (error) {
