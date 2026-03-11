@@ -3,6 +3,7 @@ node_modules
 # Edit at https://www.toptal.com/developers/gitignore?templates=node
 src/config/serviceAccountKey.js
 .env
+createAdmin.js
 ### Node ###
 # Logs
 logs

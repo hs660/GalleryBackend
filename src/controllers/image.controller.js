@@ -28,7 +28,7 @@ export const getAllImages = async (req, res) => {
   try {
     const { sort } = req.query;
     const userId = req.user?.uid; // logged user (optional)
-
+    console.log("UserId:", userId);
     let sortOption = {};
 
     if (sort === "oldest") {
