@@ -24,7 +24,7 @@ app.use(cors({
   methods: ["GET","POST","PUT","DELETE","OPTIONS"],
   allowedHeaders: ["Content-Type","Authorization"]
 }));
-app.options("*", cors()); 
+
 app.use(express.json({limit:"20kb"}))
 app.use(express.urlencoded({extended:true, limit:"16kb"}))
 app.use(express.static("public"))

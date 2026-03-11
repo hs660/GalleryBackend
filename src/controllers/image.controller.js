@@ -46,7 +46,7 @@ export const getAllImages = async (req, res) => {
       title: img.title,
       imageUrl: img.imageUrl,
       likesCount: img.likesCount,
-      isLiked: userId ? img.likedBy.includes(userId) : false
+      isLiked: userId ? img.likedBy?.includes(userId) : false
     }));
 
     res.json(formattedImages);
@@ -104,4 +104,22 @@ export const getLikedImages = async (req, res) => {
     console.error("Get Liked Images Error:", error);
     res.status(500).json({ message: "Server error" });
   }
+};
+
+export const optionalVerifyUser = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return next();
+  }
+
+  try {
+    const token = authHeader.split(" ")[1];
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    req.user = decodedToken;
+  } catch (error) {
+    console.log("Token optional, skipping...");
+  }
+
+  next();
 };
