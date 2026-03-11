@@ -27,21 +27,29 @@ export const verifyUser = async (req, res, next) => {
 export const getAllImages = async (req, res) => {
   try {
     const { sort } = req.query;
+    const userId = req.user?.uid; // logged user (optional)
 
     let sortOption = {};
 
     if (sort === "oldest") {
-      sortOption = { createdAt: 1 }; // Ascending
+      sortOption = { createdAt: 1 };
     } else if (sort === "popular") {
-      sortOption = { likesCount: -1 }; // Most likes first
+      sortOption = { likesCount: -1 };
     } else {
-      // Default → newest
       sortOption = { createdAt: -1 };
     }
 
     const images = await Image.find().sort(sortOption);
 
-    res.json(images);
+    const formattedImages = images.map((img) => ({
+      _id: img._id,
+      title: img.title,
+      imageUrl: img.imageUrl,
+      likesCount: img.likesCount,
+      isLiked: userId ? img.likedBy.includes(userId) : false
+    }));
+
+    res.json(formattedImages);
 
   } catch (error) {
     console.error("Get All Images Error:", error);
@@ -65,19 +73,19 @@ export const toggleLike = async (req, res) => {
     if (alreadyLiked) {
       image.likesCount -= 1;
       image.likedBy = image.likedBy.filter(uid => uid !== userId);
-      isLiked:false;
+      isLiked = false;
     } else {
       image.likesCount += 1;
       image.likedBy.push(userId);
-      isLiked:true;
+      isLiked = true;
     }
 
     await image.save();
 
-    res.json({ 
-      message: isLiked ? "Unliked" : "Liked", 
+    res.json({
+      message: isLiked ? "Liked" : "Unliked",
       likesCount: image.likesCount,
-      isLiked: isLiked
+      isLiked
     });
 
   } catch (error) {
