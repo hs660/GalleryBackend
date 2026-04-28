@@ -44,6 +44,7 @@ export const getAllImages = async (req, res) => {
     const formattedImages = images.map((img) => ({
       _id: img._id,
       title: img.title,
+      tags: img.tags,
       imageUrl: img.imageUrl,
       likesCount: img.likesCount,
       isLiked: userId ? img.likedBy?.includes(userId) : false

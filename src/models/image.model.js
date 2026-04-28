@@ -18,6 +18,10 @@ const imageSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Admin",
     },
+    tags:{
+      type:String,
+      default:"",
+    },
     likesCount: {
       type: Number,
       default: 0,

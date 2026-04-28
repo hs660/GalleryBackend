@@ -53,28 +53,34 @@ export const getDashboard = async (req, res) => {
 export const uploadImage = async (req, res) => {
   try {
     const localPath = req.file?.path;
-    const { title } = req.body;
+    const { title,tags } = req.body;
 
-    if (!localPath) {
-      return res.status(400).json({ message: "Image required" });
+console.log("TAG RECEIVED:", title,tags);
+    if (!localPath || !title) {
+      return res.status(400).json({
+        message: "Title and Image are required",
+      });
     }
-
     const cloudinaryResponse = await uploadCloudinary(localPath);
 
     const newImage = await Image.create({
       title,
+      tags,
       imageUrl: cloudinaryResponse.secure_url,
       public_id: cloudinaryResponse.public_id,
       uploadedBy: req.admin._id,
     });
 
-    return res.status(201).json({
+    res.status(201).json({
       success: true,
       data: newImage,
     });
 
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };
 export const deleteImage = async (req, res) => {
