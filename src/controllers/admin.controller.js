@@ -193,9 +193,6 @@ export const getAllImages = async (req, res) => {
     });
   }
 };
-
-
-
 export const toggleLikeImage = async (req, res) => {
   try {
     const userId = req.user._id; // Firebase JWT se aayega
@@ -231,5 +228,44 @@ export const toggleLikeImage = async (req, res) => {
 
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+export const getAdminStats = async (req, res) => {
+  try {
+    // Total Images
+    const totalImages = await Image.countDocuments();
+
+    // Total Users
+    const totalUsers = await User.countDocuments();
+
+    // Total Likes (sum of all images)
+    const totalLikesData = await Image.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalLikes: { $sum: "$likesCount" }
+        }
+      }
+    ]);
+
+    const totalLikes = totalLikesData[0]?.totalLikes || 0;
+
+    // Most liked image
+    const mostLiked = await Image.findOne().sort({ likesCount: -1 });
+
+    res.status(200).json({
+      success: true,
+      data: {
+        totalImages,
+        totalUsers,
+        totalLikes,
+        mostLiked,
+      },
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };

@@ -26,5 +26,6 @@ router.post(
  // verifyUserJWT,  // Firebase login ke baad wala middleware
   toggleLikeImage
 );
+router.get("/admin/stats", verifyJWT, getAdminStats);
 
 export default router;
