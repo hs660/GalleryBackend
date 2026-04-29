@@ -5,6 +5,7 @@ import adminRouter from  "../src/routes/admin.routes.js";
 import userRouter from "../src/routes/user.rotes.js"
 import imageRouter from "../src/routes/image.route.js"
 
+
 const app = express();
 
 const allowedOrigins = [
