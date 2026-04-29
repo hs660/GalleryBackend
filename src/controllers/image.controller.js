@@ -62,22 +62,26 @@ export const getAllImages = async (req, res) => {
 export const toggleLike = async (req, res) => {
   try {
     const { imageId } = req.params;
-    const userId = req.user.uid; // Firebase UID
+    const userId = req.user._id;
 
     const image = await Image.findById(imageId);
-    if (!image) return res.status(404).json({ message: "Image not found" });
+    if (!image) {
+      return res.status(404).json({ message: "Image not found" });
+    }
 
-    if (!image.likedBy) image.likedBy = [];
+    const alreadyLiked = image.likedBy.some(
+      id => id.toString() === userId.toString()
+    );
+
     let isLiked;
-    const alreadyLiked = image.likedBy.includes(userId);
 
     if (alreadyLiked) {
-      image.likesCount -= 1;
-      image.likedBy = image.likedBy.filter(uid => uid !== userId);
+      image.likedBy.pull(userId);
+      image.likesCount = Math.max(0, image.likesCount - 1);
       isLiked = false;
     } else {
-      image.likesCount += 1;
       image.likedBy.push(userId);
+      image.likesCount += 1;
       isLiked = true;
     }
 

@@ -18,9 +18,9 @@ const imageSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Admin",
     },
-    tags:{
-      type:String,
-      default:"",
+    tags: {
+      type: String,
+      default: "",
     },
     likesCount: {
       type: Number,
@@ -28,10 +28,10 @@ const imageSchema = new mongoose.Schema(
     },
     likedBy: [
       {
-        type: String, // Firebase uid of logged-in user
-        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
       }
-    ],
+    ]
   },
   { timestamps: true }
 );

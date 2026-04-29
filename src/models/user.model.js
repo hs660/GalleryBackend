@@ -1,25 +1,17 @@
-import mongoose,{Schema} from "mongoose";
-
-
-const userSchema = new Schema(
-  {
-    name: String,
-    email: {
-      type: String,
-      unique: true,
-    },
-    picture: String,
-
-    likedImages: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Image",
-      },
-    ],
+const userSchema = new Schema({
+  uid: {
+    type: String,
+    unique: true,
+    required: true
   },
-  { timestamps: true }
-);
+  name: String,
+  email: String,
+  picture: String,
 
-
-export default mongoose.model("User", userSchema);
-
+  likedImages: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Image"
+    }
+  ]
+});

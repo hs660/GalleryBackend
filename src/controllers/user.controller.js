@@ -12,12 +12,13 @@ export const firebaseLogin = async (req, res) => {
     const { uid, email, name, picture } = decodedToken;
 
     // 2️⃣ Check if user exists
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ uid });
 
     if (!user) {
       user = await User.create({
-        name,
+        uid,
         email,
+        name,
         picture
       });
     }
