@@ -31,7 +31,7 @@ router.post(
 router.get("/debug-db", async (req, res) => {
   try {
     const users = await userModel.find();
-    const images = await userModel.find();
+    const images = await imageModel.find();
 
     res.json({
       usersCount: users.length,
