@@ -132,7 +132,7 @@ export const updateImageTitle = async (req, res) => {
 export const updateImage = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title } = req.body;
+    const { title, tags } = req.body;   // ✅ TAG ADD
 
     const image = await Image.findById(id);
 
@@ -140,14 +140,18 @@ export const updateImage = async (req, res) => {
       return res.status(404).json({ message: "Image not found" });
     }
 
-    // Title update
+    // ✅ Title update
     if (title) {
       image.title = title;
     }
 
-    // If new image uploaded
+    // ✅ Tag update (IMPORTANT)
+    if (tags !== undefined) {
+      image.tags = tags;   // string case
+    }
+
+    // ✅ Image update
     if (req.file) {
-      // Delete old image from Cloudinary
       if (image.public_id) {
         await cloudinary.uploader.destroy(image.public_id);
       }
