@@ -1,4 +1,5 @@
-const userSchema = new Schema({
+import mongoose,{Schema} from "mongoose";
+ const userSchema = new Schema({
   uid: {
     type: String,
     unique: true,
@@ -15,3 +16,5 @@ const userSchema = new Schema({
     }
   ]
 });
+
+export default mongoose.model("User",userSchema)
