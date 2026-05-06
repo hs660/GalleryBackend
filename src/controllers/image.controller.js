@@ -29,25 +29,19 @@ export const getAllImages = async (req, res) => {
     const { sort = "latest", tag = "all" } = req.query;
     const userId = req.user?.uid;
 
-    // 🔹 FILTER
     let filter = {};
 
+    // ✅ SIMPLE TAG FILTER
     if (tag !== "all") {
-      filter.tags = tag; 
-      // agar multiple tags use karoge to:
-      // filter.tags = { $in: [tag] };
+      filter.tags = tag.toLowerCase();
     }
 
-    // 🔹 SORT
+    // ✅ SORT
     let sortOption = {};
 
-    if (sort === "oldest") {
-      sortOption = { createdAt: 1 };
-    } else if (sort === "popular") {
-      sortOption = { likesCount: -1 };
-    } else {
-      sortOption = { createdAt: -1 };
-    }
+    if (sort === "oldest") sortOption = { createdAt: 1 };
+    else if (sort === "popular") sortOption = { likesCount: -1 };
+    else sortOption = { createdAt: -1 };
 
     const images = await Image.find(filter).sort(sortOption);
 
