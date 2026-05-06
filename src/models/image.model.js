@@ -15,12 +15,16 @@ const imageSchema = new mongoose.Schema(
       required: true,
     },
     uploadedBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Admin",
+      type: String, // Firebase UID (admin + user)
     },
-    tags:{
-      type:String,
-      default:"",
+    role: {
+      type: String,
+      enum: ["admin", "user"],
+      default: "user",
+    },
+    tags: {
+      type: String,
+      default: "",
     },
     likesCount: {
       type: Number,
