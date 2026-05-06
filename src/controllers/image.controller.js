@@ -10,22 +10,24 @@ const adminEmails = ["admin.com"];
 export const uploadImage = async (req, res) => {
   try {
     const localPath = req.file?.path;
-    const { title,tags } = req.body;
+    const { title, tags } = req.body;
 
-console.log("TAG RECEIVED:", title,tags);
+    console.log("TAG RECEIVED:", title, tags);
+
     if (!localPath || !title) {
       return res.status(400).json({
         message: "Title and Image are required",
       });
     }
+
     const cloudinaryResponse = await uploadCloudinary(localPath);
 
     const newImage = await Image.create({
       title,
-      tags,
+      tags: tags?.toLowerCase().trim(),
       imageUrl: cloudinaryResponse.secure_url,
       public_id: cloudinaryResponse.public_id,
-      uploadedBy: req.admin._id,
+      uploadedBy: req.user.uid, // ✅ FIX
     });
 
     res.status(201).json({
@@ -34,7 +36,7 @@ console.log("TAG RECEIVED:", title,tags);
     });
 
   } catch (error) {
-    console.error(error);
+    console.error("UPLOAD ERROR:", error);
     res.status(500).json({
       message: error.message,
     });
