@@ -9,7 +9,6 @@ router.get("/",optionalVerifyUser, getAllImages);
 router.post("/like/:imageId", verifyUser, toggleLike);
 router.get("/liked", verifyUser, getLikedImages);
 router.post("/upload", 
-    verifyUser, 
     upload.single("image"), 
     uploadImage);
 // router.post(
