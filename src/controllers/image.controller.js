@@ -26,9 +26,19 @@ export const verifyUser = async (req, res, next) => {
 // Get All Images with Sorting
 export const getAllImages = async (req, res) => {
   try {
-    const { sort } = req.query;
-    const userId = req.user?.uid; // logged user (optional)
-    console.log("UserId:", userId);
+    const { sort = "latest", tag = "all" } = req.query;
+    const userId = req.user?.uid;
+
+    // 🔹 FILTER
+    let filter = {};
+
+    if (tag !== "all") {
+      filter.tags = tag; 
+      // agar multiple tags use karoge to:
+      // filter.tags = { $in: [tag] };
+    }
+
+    // 🔹 SORT
     let sortOption = {};
 
     if (sort === "oldest") {
@@ -39,7 +49,7 @@ export const getAllImages = async (req, res) => {
       sortOption = { createdAt: -1 };
     }
 
-    const images = await Image.find().sort(sortOption);
+    const images = await Image.find(filter).sort(sortOption);
 
     const formattedImages = images.map((img) => ({
       _id: img._id,
@@ -47,7 +57,7 @@ export const getAllImages = async (req, res) => {
       tags: img.tags,
       imageUrl: img.imageUrl,
       likesCount: img.likesCount,
-      isLiked: userId ? img.likedBy?.includes(userId) : false
+      isLiked: userId ? img.likedBy?.includes(userId) : false,
     }));
 
     res.json(formattedImages);
