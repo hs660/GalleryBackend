@@ -33,7 +33,7 @@ export const getAllImages = async (req, res) => {
 
     // ✅ SIMPLE TAG FILTER
     if (tag !== "all") {
-      filter.tags = tag.toLowerCase();
+      filter.tags = new RegExp(`^${tag}$`, "i");
     }
 
     // ✅ SORT
